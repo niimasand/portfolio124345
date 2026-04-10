@@ -44,13 +44,14 @@ body {
   transform: translate(-50%,-50%);
   transition: transform .12s ease, width .25s ease, height .25s ease, background .2s, opacity .3s;
 }
-#cur { width: 9px; height: 9px; background: #1a1a18; box-shadow: 0 0 8px rgba(145,193,206,.6); }
+#cur { width: 9px; height: 9px; background: #1a1a18; box-shadow: 0 0 8px rgba(145,193,206,.6); opacity: 0; }
 #cur-ring {
   width: 32px; height: 32px; z-index: 9998;
   border: 1px solid rgba(145,193,206,.5);
   box-shadow: 0 0 12px rgba(145,193,206,.2);
   transition: transform .07s ease, width .25s ease, height .25s ease;
   background: transparent;
+  opacity: 0;
 }
 body.hovering #cur { width: 13px; height: 13px; background: #1a1a18; box-shadow: 0 0 14px rgba(145,193,206,.8); }
 body.hovering #cur-ring { width: 46px; height: 46px; border-color: rgba(145,193,206,.8); box-shadow: 0 0 20px rgba(145,193,206,.25); }
@@ -403,7 +404,7 @@ footer {
     </svg>Soojin Park</a>
   <ul class="nav-links">
     <li><a href="portfolio.html">Home</a></li>
-    <li><a href="portfolio.html#work">Work</a></li>
+    <li><a href="work.html">Work</a></li>
     <li><a href="about.html" class="active">About</a></li>
     <li><a href="#" class="nav-hire"><span>Contact</span></a></li>
   </ul>
@@ -414,8 +415,8 @@ footer {
 
 <!-- MOBILE DRAWER -->
 <div class="nav-drawer" id="drawer">
-  <a href="portfolio.html" class="drawer-link">Home</a>
-  <a href="portfolio.html#work" class="drawer-link">Work</a>
+  <a href="portfolio.html">Home</a>
+  <a href="work.html" class="drawer-link">Work</a>
   <a href="about.html" class="drawer-link">About</a>
   <a href="#" class="drawer-link nav-drawer-contact">Contact</a>
 </div>
@@ -553,7 +554,7 @@ document.querySelectorAll('.drawer-link').forEach(link => {
 const cur = document.getElementById('cur');
 const ring = document.getElementById('cur-ring');
 let mx = 0, my = 0, rx = 0, ry = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.opacity = 1; ring.style.opacity = 1; });
 (function animCursor() {
   rx += (mx - rx) * 0.12;
   ry += (my - ry) * 0.12;
