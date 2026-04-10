@@ -37,24 +37,34 @@ body {
 }
 
 /* ── CURSOR ── */
-#cur, #cur-ring {
-  position: fixed; top: 0; left: 0;
-  pointer-events: none; z-index: 9999;
+#cur {
+  position: fixed;
+  width: 10px; height: 10px;
+  background: #1a1a18;
   border-radius: 50%;
-  transform: translate(-50%,-50%);
-  transition: transform .12s ease, width .25s ease, height .25s ease, background .2s, opacity .3s;
+  pointer-events: none;
+  z-index: 99999;
+  box-shadow: 0 0 10px rgba(145,193,206,.8), 0 0 22px rgba(145,193,206,.35);
+  margin-left: -5px;
+  margin-top: -5px;
+  top: -100px; left: -100px;
+  transition: width .2s, height .2s, margin .2s;
 }
-#cur { width: 9px; height: 9px; background: #1a1a18; box-shadow: 0 0 8px rgba(145,193,206,.6); opacity: 0; }
 #cur-ring {
-  width: 32px; height: 32px; z-index: 9998;
-  border: 1px solid rgba(145,193,206,.5);
-  box-shadow: 0 0 12px rgba(145,193,206,.2);
-  transition: transform .07s ease, width .25s ease, height .25s ease;
-  background: transparent;
-  opacity: 0;
+  position: fixed;
+  width: 34px; height: 34px;
+  border: 1.5px solid rgba(145,193,206,.6);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  box-shadow: 0 0 14px rgba(145,193,206,.2);
+  margin-left: -17px;
+  margin-top: -17px;
+  top: -100px; left: -100px;
+  transition: width .25s, height .25s, margin .25s, border-color .2s;
 }
-body.hovering #cur { width: 13px; height: 13px; background: #1a1a18; box-shadow: 0 0 14px rgba(145,193,206,.8); }
-body.hovering #cur-ring { width: 46px; height: 46px; border-color: rgba(145,193,206,.8); box-shadow: 0 0 20px rgba(145,193,206,.25); }
+body.hovering #cur { width: 14px; height: 14px; margin-left: -7px; margin-top: -7px; }
+body.hovering #cur-ring { width: 48px; height: 48px; margin-left: -24px; margin-top: -24px; border-color: rgba(145,193,206,.9); }
 
 /* ── PROGRESS BAR ── */
 .progress {
@@ -69,8 +79,9 @@ nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   padding: 32px 64px;
-  transition: padding .35s ease, background .35s ease, border-color .35s ease;
-  border-bottom: 1px solid transparent;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  transition: padding .35s ease;
 }
 nav.stuck {
   padding: 20px 64px;
@@ -195,12 +206,13 @@ nav.stuck {
   grid-template-columns: 300px 1fr;
   gap: 56px;
   align-items: start;
-  opacity: 0; animation: rise .7s ease .2s forwards;
+  opacity: 1;
 }
 
 /* Photo column */
 .about-photo {
-  position: sticky; top: 120px;
+  position: sticky; top: 100px;
+  align-self: start;
 }
 .photo-frame {
   width: 100%;
@@ -459,8 +471,27 @@ footer {
         </p>
       </div>
 
+      <!-- Clients -->
+      <div class="skills-section" style="margin-top: 40px;">
+        <div class="skills-group">
+          <p class="skills-label">Clients</p>
+          <div class="tag-list">
+            <span class="tag">Cécred</span>
+            <span class="tag">Glossier</span>
+            <span class="tag">Fenty Beauty</span>
+            <span class="tag">Briogeo</span>
+            <span class="tag">Curology</span>
+            <span class="tag">Thrive Causemetics</span>
+            <span class="tag">Ritual</span>
+            <span class="tag">Prose</span>
+            <span class="tag">Nécessaire</span>
+            <span class="tag">UNC Charlotte</span>
+          </div>
+        </div>
+      </div>
+
       <!-- Skills -->
-      <div class="skills-section reveal">
+      <div class="skills-section">
         <div class="skills-group">
           <p class="skills-label">Craft</p>
           <div class="tag-list">
@@ -477,7 +508,7 @@ footer {
           </div>
         </div>
 
-        <div class="skills-group reveal reveal-delay-1">
+        <div class="skills-group">
           <p class="skills-label">Tools</p>
           <div class="tag-list">
             <span class="tag">Figma</span>
@@ -490,7 +521,7 @@ footer {
           </div>
         </div>
 
-        <div class="skills-group reveal reveal-delay-2">
+        <div class="skills-group">
           <p class="skills-label">Industries</p>
           <div class="tag-list">
             <span class="tag">Beauty</span>
@@ -504,7 +535,7 @@ footer {
       </div>
 
       <!-- Currently -->
-      <div class="currently reveal">
+      <div class="currently">
         <div class="currently-item">
           <p class="currently-label">Currently</p>
           <p class="currently-value">Senior Graphic Designer<br>Mason Interactive</p>
@@ -551,21 +582,28 @@ document.querySelectorAll('.drawer-link').forEach(link => {
 });
 
 // Custom cursor
-const cur = document.getElementById('cur');
-const ring = document.getElementById('cur-ring');
-let mx = 0, my = 0, rx = 0, ry = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.opacity = 1; ring.style.opacity = 1; });
-(function animCursor() {
-  rx += (mx - rx) * 0.12;
-  ry += (my - ry) * 0.12;
-  cur.style.left = mx + 'px'; cur.style.top = my + 'px';
-  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-  requestAnimationFrame(animCursor);
+(function() {
+  const dot  = document.getElementById('cur');
+  const ring = document.getElementById('cur-ring');
+  let mx = -100, my = -100, rx = -100, ry = -100;
+  document.addEventListener('mousemove', function(e) {
+    mx = e.clientX;
+    my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top  = my + 'px';
+  });
+  (function loop() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a, button').forEach(function(el) {
+    el.addEventListener('mouseenter', function() { document.body.classList.add('hovering'); });
+    el.addEventListener('mouseleave', function() { document.body.classList.remove('hovering'); });
+  });
 })();
-document.querySelectorAll('a, button').forEach(el => {
-  el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-  el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-});
 
 // Scroll progress + nav stuck
 const prog = document.getElementById('progress');
