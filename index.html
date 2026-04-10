@@ -168,50 +168,34 @@ nav.stuck {
 /* Inline scroll images */
 .headline-img {
   display: inline-block;
-  border-radius: 4px;
+  border-radius: 3px;
   overflow: hidden;
   flex-shrink: 0;
   will-change: transform;
   position: relative;
+  transition: transform .6s cubic-bezier(.25,.46,.45,.94);
 }
 .headline-img.sz-sm { width: clamp(80px, 10vw, 140px); height: clamp(60px, 7.5vw, 104px); }
 .headline-img.sz-md { width: clamp(110px, 14vw, 190px); height: clamp(80px, 10vw, 138px); }
 .headline-img.sz-lg { width: clamp(130px, 17vw, 230px); height: clamp(88px, 11vw, 150px); }
 .headline-img.sz-tall { width: clamp(70px, 9vw, 120px); height: clamp(90px, 12vw, 164px); }
+.headline-img.blob-img { width: clamp(120px, 14vw, 200px); height: clamp(44px, 5vw, 72px); }
+.headline-img.blob-img.sm { width: clamp(80px, 9vw, 130px); height: clamp(30px, 3.5vw, 50px); }
 
 .headline-img .img-inner {
   width: 100%; height: 100%;
   background-size: cover; background-position: center;
   transition: transform .6s cubic-bezier(.25,.46,.45,.94);
 }
-.headline-img:hover .img-inner { transform: scale(1.06); }
+.headline-img:hover .img-inner { transform: none; }
 
 /* placeholder art inside headline images */
-.hi-1 { background: linear-gradient(135deg, #1e1008 0%, #321a0e 100%); }
-.hi-1::after {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(circle at 40% 60%, rgba(145,193,206,.4) 0%, transparent 60%);
-}
-.hi-2 { background: linear-gradient(160deg, #0e1210 0%, #162018 100%); }
-.hi-2::after {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(circle at 60% 40%, rgba(100,200,140,.35) 0%, transparent 60%);
-}
-.hi-3 { background: linear-gradient(200deg, #12100e 0%, #221e18 100%); }
-.hi-3::after {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(255,190,100,.3) 0%, transparent 55%);
-}
-.hi-4 { background: linear-gradient(135deg, #10100e 0%, #1c1c18 100%); }
-.hi-4::after {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(circle at 30% 70%, rgba(44,44,42,.15) 0%, transparent 55%);
-}
-.hi-5 { background: linear-gradient(160deg, #100e0e 0%, #201212 100%); }
-.hi-5::after {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(circle at 70% 30%, rgba(145,193,206,.3) 0%, transparent 55%);
-}
+.hi-1 { background: linear-gradient(135deg, #e6dfd4 0%, #d8d0c4 100%); }
+.hi-2 { background: linear-gradient(160deg, #e8e3da 0%, #ddd8ce 100%); }
+.hi-3 { background: #e4dfd6; }
+.hi-4 { background: linear-gradient(135deg, #ddd8cc 0%, #d0cbc0 100%); }
+.hi-5 { background: linear-gradient(160deg, #e2ddd4 0%, #d6d0c6 100%); }
+.img-inner { background-size: cover; background-position: center; }
 
 /* sub row */
 .hero-sub-row {
@@ -840,31 +824,31 @@ footer {
 
       <div class="headline-row">
         <span class="headline-word"><span class="script-initial">S</span>oojin</span>
-        <div class="headline-img sz-md">
-          <div class="img-inner hi-1"></div>
+        <div class="headline-img blob-img" id="blob1">
+          <div class="img-inner hi-1" style="background-image:url('cm_ring.png');background-size:cover;background-position:center;"></div>
         </div>
         <span class="headline-word outline">Design</span>
       </div>
 
       <div class="headline-row">
-        <div class="headline-img sz-tall">
-          <div class="img-inner hi-2"></div>
+        <div class="headline-img blob-img" id="blob2">
+          <div class="img-inner hi-2" style="background-image:url('cm_neck.png');background-size:cover;background-position:center;"></div>
         </div>
-        <span class="headline-word accent"><span class="script-initial">P</span>ark.</span>
-        <div class="headline-img sz-lg">
-          <div class="img-inner hi-3"></div>
+        <span class="headline-word accent"><span class="script-initial">P</span>ark</span>
+        <div class="headline-img blob-img" id="blob3">
+          <div class="img-inner hi-3" style="background-image:url('vera.png');background-size:cover;background-position:center;"></div>
         </div>
         <span class="headline-word outline" style="font-size: clamp(28px, 4vw, 56px); align-self: flex-end; padding-bottom: 8px;">Direction</span>
       </div>
 
-      <div class="headline-row" style="margin-top: 4px;">
-        <span class="headline-word" style="font-size: clamp(28px,3.5vw,48px); color: var(--text-mid); font-weight:400;">Performance-Driven</span>
-        <div class="headline-img sz-sm">
-          <div class="img-inner hi-4"></div>
+      <div class="headline-row" style="margin-top: 2px;">
+        <span class="headline-word" style="font-size: clamp(20px,2.6vw,36px); color: var(--text-mid); font-weight:400;">Performance-Driven</span>
+        <div class="headline-img blob-img sm" id="blob4">
+          <div class="img-inner hi-4" style="background-image:url('lunette.png');background-size:cover;background-position:center;"></div>
         </div>
-        <span class="headline-word outline" style="font-size: clamp(28px,3.5vw,48px);">Visuals</span>
-        <div class="headline-img sz-sm hide-mobile">
-          <div class="img-inner hi-5"></div>
+        <span class="headline-word outline" style="font-size: clamp(20px,2.6vw,36px);">Visuals</span>
+        <div class="headline-img blob-img sm hide-mobile" id="blob5">
+          <div class="img-inner hi-5" style="background-image:url('cecred.png');background-size:cover;background-position:center;"></div>
         </div>
       </div>
 
@@ -1030,7 +1014,50 @@ document.querySelectorAll('a, button, .proj-card, .project-featured').forEach(el
   el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
 });
 
-// Scroll progress
+// Blob cursor repulsion
+(function() {
+  const blobs = document.querySelectorAll('.blob');
+  const blobState = Array.from(blobs).map(() => ({ ox: 0, oy: 0, vx: 0, vy: 0 }));
+  const REPEL_DIST = 160;
+  const STRENGTH = 0.18;
+  const DAMPEN = 0.72;
+  const RETURN = 0.08;
+
+  function blobLoop() {
+    blobs.forEach((blob, i) => {
+      const rect = blob.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = cx - mx;
+      const dy = cy - my;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const state = blobState[i];
+
+      if (dist < REPEL_DIST && dist > 0) {
+        const force = (REPEL_DIST - dist) / REPEL_DIST;
+        state.vx += (dx / dist) * force * STRENGTH * 18;
+        state.vy += (dy / dist) * force * STRENGTH * 18;
+      }
+
+      // Spring back to origin
+      state.vx += (-state.ox) * RETURN;
+      state.vy += (-state.oy) * RETURN;
+
+      // Dampen
+      state.vx *= DAMPEN;
+      state.vy *= DAMPEN;
+
+      state.ox += state.vx;
+      state.oy += state.vy;
+
+      blob.style.transform = 'translate(' + state.ox.toFixed(2) + 'px,' + state.oy.toFixed(2) + 'px)';
+    });
+    requestAnimationFrame(blobLoop);
+  }
+  blobLoop();
+})();
+
+
 const prog = document.getElementById('progress');
 window.addEventListener('scroll', () => {
   const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
