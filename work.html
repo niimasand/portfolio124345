@@ -165,17 +165,17 @@ nav.stuck {
 
 /* ── PAGE ── */
 .work-page {
-  padding: 140px 64px 100px;
+  padding: 140px 0 100px;
 }
 .work-inner {
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  padding: 0 48px;
 }
 
 /* Header */
 .page-header {
   display: flex; align-items: flex-end; justify-content: space-between;
-  margin-bottom: 64px;
+  margin-bottom: 48px;
   opacity: 0; animation: rise .6s ease .1s forwards;
 }
 .page-eyebrow {
@@ -222,7 +222,12 @@ nav.stuck {
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
+  gap: 3px;
+}
+
+.proj-thumb {
+  aspect-ratio: 5/4;
+  position: relative; overflow: hidden;
 }
 
 /* Project card */
@@ -346,18 +351,18 @@ footer {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1100px) {
-  .work-page { padding: 140px 40px 80px; }
+  .work-inner { padding: 0 32px; }
   .projects-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 768px) {
   #cur, #cur-ring { display: none; }
-  body { cursor: auto; }
   nav { padding: 20px 24px; }
   nav.stuck { padding: 14px 24px; }
   .nav-links { display: none; }
   .nav-burger { display: flex; }
   .nav-drawer { display: flex; }
-  .work-page { padding: 100px 24px 64px; }
+  .work-page { padding: 100px 0 64px; }
+  .work-inner { padding: 0 24px; }
   .projects-grid { grid-template-columns: 1fr; }
   .page-header { flex-direction: column; align-items: flex-start; gap: 8px; }
   footer { padding: 20px 24px; flex-direction: column; align-items: flex-start; gap: 8px; }
@@ -593,24 +598,6 @@ footer {
         </div>
       </a>
 
-      <!-- 10 -->
-      <a href="#" class="proj-card" data-tags="campaign,brand">
-        <div class="proj-thumb">
-          <div class="proj-thumb-inner art-10"></div>
-          <div class="proj-overlay">
-            <div class="proj-overlay-icon">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div class="proj-meta">
-          <div class="proj-tags"><span class="proj-tag">Campaign</span><span class="proj-tag">Art Direction</span></div>
-          <p class="proj-client">Nécessaire</p>
-          <p class="proj-desc-short">Art directed seasonal campaign with clean editorial aesthetic across all channels.</p>
-        </div>
-      </a>
 
     </div><!-- /grid -->
   </div><!-- /inner -->
