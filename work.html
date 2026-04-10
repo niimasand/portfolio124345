@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work — Soojin Park · Graphic Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Instrument+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --accent: #91c1ce;
+  --accent-muted: rgba(145, 193, 206, 0.18);
+  --accent-glow: rgba(145, 193, 206, 0.25);
+  --charcoal: #2C2C2A;
+  --bg: #f3f0e3;
+  --bg-card: #eae7d8;
+  --bg-card-hover: #e2dece;
+  --text: #2C2C2A;
+  --text-mid: #5A5750;
+  --text-dim: #8A8680;
+  --border: rgba(44,44,42,0.09);
+  --font-display: 'HelveticaNeue', 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
+  --font-script: 'Great Vibes', cursive;
+  --font-body: 'Instrument Sans', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CURSOR ── */
+#cur, #cur-ring {
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9999;
+  border-radius: 50%;
+  transform: translate(-50%,-50%);
+  transition: transform .12s ease, width .25s ease, height .25s ease, background .2s, opacity .3s;
+}
+#cur { width: 9px; height: 9px; background: #1a1a18; box-shadow: 0 0 8px rgba(145,193,206,.6); }
+#cur-ring {
+  width: 32px; height: 32px; z-index: 9998;
+  border: 1px solid rgba(145,193,206,.5);
+  box-shadow: 0 0 12px rgba(145,193,206,.2);
+  transition: transform .07s ease, width .25s ease, height .25s ease;
+  background: transparent;
+}
+body.hovering #cur { width: 13px; height: 13px; background: #1a1a18; box-shadow: 0 0 14px rgba(145,193,206,.8); }
+body.hovering #cur-ring { width: 46px; height: 46px; border-color: rgba(145,193,206,.8); box-shadow: 0 0 20px rgba(145,193,206,.25); }
+
+/* ── PROGRESS BAR ── */
+.progress {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 2px; z-index: 200; transform-origin: left;
+  background: var(--accent); transform: scaleX(0);
+  transition: transform .1s linear;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 32px 64px;
+  transition: padding .35s ease, background .35s ease, border-color .35s ease;
+  border-bottom: 1px solid transparent;
+}
+nav.stuck {
+  padding: 20px 64px;
+  background: rgba(243,240,227,.96);
+  backdrop-filter: blur(18px);
+  border-color: var(--border);
+}
+.logo {
+  font-family: var(--font-display);
+  font-weight: 500; font-size: 12px;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--text); text-decoration: none;
+  display: inline-flex; align-items: center;
+}
+.nav-links {
+  display: flex; align-items: center; gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 12px; font-weight: 400;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--text-mid); text-decoration: none;
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a.active { color: var(--text); }
+.nav-hire {
+  font-size: 12px; font-weight: 500; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--charcoal);
+  text-decoration: none;
+  border: 1px solid rgba(44,44,42,.35);
+  padding: 9px 22px; border-radius: 2px;
+  position: relative; overflow: hidden;
+  isolation: isolate;
+  transition: color .3s ease, border-color .3s ease;
+  display: inline-block;
+}
+.nav-hire::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--accent);
+  transform: translateX(-101%);
+  transition: transform .35s cubic-bezier(.77,0,.18,1);
+  z-index: 0;
+}
+.nav-hire span { position: relative; z-index: 1; }
+.nav-hire:hover::before { transform: translateX(0); }
+.nav-hire:hover { color: var(--charcoal); border-color: var(--accent); }
+
+/* Hamburger */
+.nav-burger {
+  display: none;
+  flex-direction: column; justify-content: center; gap: 5px;
+  width: 36px; height: 36px;
+  background: none; border: none; cursor: none;
+  padding: 4px; z-index: 200;
+}
+.nav-burger span {
+  display: block; width: 22px; height: 1.5px;
+  background: var(--text);
+  transition: transform .3s ease, opacity .3s ease, width .3s ease;
+  transform-origin: center;
+}
+.nav-burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav-burger.open span:nth-child(2) { opacity: 0; width: 0; }
+.nav-burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+.nav-drawer {
+  display: none;
+  position: fixed; inset: 0; z-index: 98;
+  background: var(--bg);
+  flex-direction: column; align-items: center; justify-content: center;
+  gap: 40px; opacity: 0; pointer-events: none;
+  transition: opacity .3s ease;
+}
+.nav-drawer.open { opacity: 1; pointer-events: all; }
+.nav-drawer a {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 8vw, 52px);
+  font-weight: 500; letter-spacing: -.02em;
+  color: var(--text); text-decoration: none;
+  transition: color .2s;
+}
+.nav-drawer a:hover { color: var(--accent); }
+.nav-drawer .nav-drawer-contact {
+  font-size: clamp(14px, 3.5vw, 18px);
+  font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--charcoal);
+  border: 1px solid rgba(44,44,42,.35);
+  padding: 12px 32px; margin-top: 8px;
+}
+
+/* ── PAGE ── */
+.work-page {
+  padding: 140px 64px 100px;
+}
+.work-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+.page-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 64px;
+  opacity: 0; animation: rise .6s ease .1s forwards;
+}
+.page-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 11px; font-weight: 500; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 16px;
+}
+.page-eyebrow::before {
+  content: ''; display: block;
+  width: 24px; height: 1px; background: var(--accent);
+}
+.page-title {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 500; letter-spacing: -.03em;
+  line-height: .95;
+}
+.page-count {
+  font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--text-dim); padding-bottom: 8px;
+}
+
+/* Filter tabs */
+.filter-row {
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+  opacity: 0; animation: rise .6s ease .2s forwards;
+}
+.filter-btn {
+  font-family: var(--font-body);
+  font-size: 11px; font-weight: 500; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--text-mid);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 7px 16px; border-radius: 2px;
+  cursor: none; transition: color .2s, border-color .2s, background .2s;
+}
+.filter-btn:hover { color: var(--text); border-color: rgba(44,44,42,.3); }
+.filter-btn.active { color: var(--text); background: var(--bg-card); border-color: rgba(44,44,42,.3); }
+
+/* Grid */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+/* Project card */
+.proj-card {
+  background: var(--bg-card);
+  position: relative; overflow: hidden;
+  transition: background .3s;
+  opacity: 0; animation: rise .6s ease forwards;
+  text-decoration: none; display: block;
+  cursor: none;
+}
+.proj-card:nth-child(1)  { animation-delay: .05s; }
+.proj-card:nth-child(2)  { animation-delay: .1s; }
+.proj-card:nth-child(3)  { animation-delay: .15s; }
+.proj-card:nth-child(4)  { animation-delay: .2s; }
+.proj-card:nth-child(5)  { animation-delay: .25s; }
+.proj-card:nth-child(6)  { animation-delay: .3s; }
+.proj-card:nth-child(7)  { animation-delay: .35s; }
+.proj-card:nth-child(8)  { animation-delay: .4s; }
+.proj-card:nth-child(9)  { animation-delay: .45s; }
+.proj-card:nth-child(10) { animation-delay: .5s; }
+.proj-card:hover { background: var(--bg-card-hover); }
+
+/* Thumbnail */
+.proj-thumb {
+  aspect-ratio: 4/3;
+  position: relative; overflow: hidden;
+}
+.proj-thumb-inner {
+  width: 100%; height: 100%;
+  background-size: cover; background-position: center;
+  transition: transform .7s cubic-bezier(.25,.46,.45,.94), filter .4s;
+  filter: saturate(.85);
+}
+.proj-card:hover .proj-thumb-inner {
+  transform: scale(1.04);
+  filter: saturate(1);
+}
+
+/* Placeholder artworks */
+.art-1  { background: linear-gradient(135deg, #d4cfc0 0%, #bfb9a8 100%); }
+.art-2  { background: linear-gradient(160deg, #c8d4d8 0%, #b0c4cb 100%); }
+.art-3  { background: linear-gradient(200deg, #d8d0c4 0%, #c4bab0 100%); }
+.art-4  { background: linear-gradient(135deg, #ccd4c0 0%, #b8c4b0 100%); }
+.art-5  { background: linear-gradient(160deg, #d4c8c8 0%, #c0b0b0 100%); }
+.art-6  { background: linear-gradient(180deg, #c8c4d4 0%, #b4b0c4 100%); }
+.art-7  { background: linear-gradient(135deg, #d8d4c4 0%, #c4bfb0 100%); }
+.art-8  { background: linear-gradient(160deg, #c4d0cc 0%, #b0c0bc 100%); }
+.art-9  { background: linear-gradient(200deg, #d0c8d0 0%, #bcb4bc 100%); }
+.art-10 { background: linear-gradient(135deg, #d4ccc4 0%, #c0b8b0 100%); }
+
+/* Hover overlay */
+.proj-overlay {
+  position: absolute; inset: 0;
+  background: rgba(44,44,42,.0);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .3s;
+}
+.proj-overlay-icon {
+  width: 40px; height: 40px;
+  border: 1px solid rgba(255,255,255,.6);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(.8);
+  transition: opacity .3s, transform .3s;
+}
+.proj-card:hover .proj-overlay { background: rgba(44,44,42,.12); }
+.proj-card:hover .proj-overlay-icon { opacity: 1; transform: scale(1); }
+
+/* Meta */
+.proj-meta {
+  padding: 20px 24px 28px;
+  border-top: 1px solid var(--border);
+}
+.proj-tags {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.proj-tag {
+  font-size: 10px; font-weight: 500; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--accent);
+  border: 1px solid rgba(145,193,206,.4);
+  padding: 3px 8px; border-radius: 1px;
+}
+.proj-client {
+  font-family: var(--font-display);
+  font-size: 16px; font-weight: 500; letter-spacing: -.01em;
+  color: var(--text); margin-bottom: 4px;
+  line-height: 1.2;
+}
+.proj-desc-short {
+  font-size: 13px; font-weight: 300;
+  color: var(--text-mid); line-height: 1.5;
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 80px;
+}
+.footer-copy { font-size: 12px; letter-spacing: .06em; color: var(--text-dim); }
+.footer-badge {
+  font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--text-dim);
+  display: flex; align-items: center; gap: 6px;
+}
+.footer-badge::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); display: block;
+  animation: pulse 2s ease infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* ── ANIMATIONS ── */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) {
+  .work-page { padding: 140px 40px 80px; }
+  .projects-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  #cur, #cur-ring { display: none; }
+  body { cursor: auto; }
+  nav { padding: 20px 24px; }
+  nav.stuck { padding: 14px 24px; }
+  .nav-links { display: none; }
+  .nav-burger { display: flex; }
+  .nav-drawer { display: flex; }
+  .work-page { padding: 100px 24px 64px; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .page-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  footer { padding: 20px 24px; flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+<div class="progress" id="progress"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="portfolio.html" class="logo">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:9px;flex-shrink:0;">
+      <polygon points="9.0,0.0 10.38,5.67 15.36,2.64 12.33,7.62 18.0,9.0 12.33,10.38 15.36,15.36 10.38,12.33 9.0,18.0 7.62,12.33 2.64,15.36 5.67,10.38 0.0,9.0 5.67,7.62 2.64,2.64 7.62,5.67" fill="var(--accent)"/>
+    </svg>Soojin Park</a>
+  <ul class="nav-links">
+    <li><a href="portfolio.html">Home</a></li>
+    <li><a href="work.html" class="active">Work</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="#" class="nav-hire"><span>Contact</span></a></li>
+  </ul>
+  <button class="nav-burger" id="burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="drawer">
+  <a href="portfolio.html" class="drawer-link">Home</a>
+  <a href="work.html" class="drawer-link">Work</a>
+  <a href="about.html" class="drawer-link">About</a>
+  <a href="#" class="drawer-link nav-drawer-contact">Contact</a>
+</div>
+
+<!-- WORK PAGE -->
+<main class="work-page">
+  <div class="work-inner">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <div class="page-eyebrow">Selected Work</div>
+        <h1 class="page-title">Projects</h1>
+      </div>
+      <span class="page-count">10 projects</span>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-row">
+      <button class="filter-btn active">All</button>
+      <button class="filter-btn">Campaign</button>
+      <button class="filter-btn">Brand</button>
+      <button class="filter-btn">Email</button>
+      <button class="filter-btn">Paid Media</button>
+      <button class="filter-btn">Motion</button>
+      <button class="filter-btn">Social</button>
+    </div>
+
+    <!-- Grid -->
+    <div class="projects-grid" id="grid">
+
+      <!-- 01 -->
+      <a href="#" class="proj-card" data-tags="campaign,brand">
+        <div class="proj-thumb">
+          <div class="proj-thumb-inner art-1"></div>
+          <div class="proj-overlay">
+            <div class="proj-overlay-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="proj-meta">
+          <div class="proj-tags"><span class="proj-tag">Campaign</span><span class="proj-tag">Art Direction</span></div>
+          <p class="proj-client">Cécred</p>
+          <p class="proj-desc-short">Multi-channel brand launch campaign spanning paid social, email &amp; OOH.</p>
+        </div>
+      </a>
+
+      <!-- 02 -->
+      <a href="#" class="proj-card" data-tags="email,paid media">
+        <div class="proj-thumb">
+          <div class="proj-thumb-inner art-2"></div>
+          <div class="proj-overlay">
+            <div class="proj-overlay-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="proj-meta">
+          <div class="proj-tags"><span class="proj-tag">Email</span><span class="proj-tag">Paid Media</span></div>
+          <p class="proj-client">Glossier</p>
+          <p class="proj-desc-short">Scalable ad template system for Meta &amp; Google, built for rapid A/B testing.</p>
+        </div>
+      </a>
+
+      <!-- 03 -->
+      <a href="#" class="proj-card" data-tags="motion,social">
+        <div class="proj-thumb">
+          <div class="proj-thumb-inner art-3"></div>
+          <div class="proj-overlay">
+            <div class="proj-overlay-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="proj-meta">
+          <div class="proj-tags"><span class="proj-tag">Motion</span><span class="proj-tag">Video</span></div>
+          <p class="proj-client">Briogeo</p>
+          <p class="proj-desc-short">Motion graphics &amp; short-form video package for organic and paid social.</p>
+        </div>
+      </a>
+
+      <!-- 04 -->
+      <a href="#" class="proj-card" data-tags="brand,campaign">
+        <div class="proj-thumb">
+          <div class="proj-thumb-inner art-4"></div>
+          <div class="proj-overlay">
+            <div class="proj-overlay-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="proj-meta">
+          <div class="proj-tags"><span class="proj-tag">Brand</span><span class="proj-tag">Campaign</span></div>
+          <p class="proj-client">Fenty Beauty</p>
+          <p class="proj-desc-short">Seasonal campaign identity and digital asset suite for product launch.</p>
+        </div>
+      </a>
+
+      <!-- 05 -->
+      <a href="#" class="proj-card" data-tags="email">
+        <div class="proj-thumb">
+          <div class="proj-thumb-inner art-5"></div>
+          <div class="proj-overlay">
+            <div class="proj-overlay-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="proj-meta">
+          <div class="proj-tags"><span class="proj-tag">Email</span><span class="proj-tag">Brand</span></div>
+          <p class="proj-client">Curology</p>
+          <p class="proj-desc-short">Full email design system — welcome flow, promos, and retention campaigns.</p>
+        </div>
+      </a>
+
+      <!-- 06 -->
+      <a href="#" class="proj-card" data-tags="paid media,social">
+        <div class="proj-thumb">
+          <div class="proj-thumb-inner art-6"></div>
+          <div class="proj-overlay">
+            <div class="proj-overlay-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="proj-meta">
+          <div class="proj-tags"><span class="proj-tag">Paid Media</span><span class="proj-tag">Social</span></div>
+          <p class="proj-client">Thrive Causemetics</p>
+          <p class="proj-desc-short">Performance ad creative across Meta, TikTok, and Pinterest for DTC growth.</p>
+        </div>
+      </a>
+
+      <!-- 07 -->
+      <a href="#" class="proj-card" data-tags="brand,campaign">
+        <div class="proj-thumb">
+          <div class="proj-thumb-inner art-7"></div>
+          <div class="proj-overlay">
+            <div class="proj-overlay-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="proj-meta">
+          <div class="proj-tags"><span class="proj-tag">Brand</span><span class="proj-tag">Digital</span></div>
+          <p class="proj-client">UNC Charlotte</p>
+          <p class="proj-desc-short">Enrollment campaign identity across email, social, and landing pages.</p>
+        </div>
+      </a>
+
+      <!-- 08 -->
+      <a href="#" class="proj-card" data-tags="motion,social">
+        <div class="proj-thumb">
+          <div class="proj-thumb-inner art-8"></div>
+          <div class="proj-overlay">
+            <div class="proj-overlay-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="proj-meta">
+          <div class="proj-tags"><span class="proj-tag">Motion</span><span class="proj-tag">Social</span></div>
+          <p class="proj-client">Ritual</p>
+          <p class="proj-desc-short">Animated social content series for product education and brand awareness.</p>
+        </div>
+      </a>
+
+      <!-- 09 -->
+      <a href="#" class="proj-card" data-tags="paid media,email">
+        <div class="proj-thumb">
+          <div class="proj-thumb-inner art-9"></div>
+          <div class="proj-overlay">
+            <div class="proj-overlay-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="proj-meta">
+          <div class="proj-tags"><span class="proj-tag">Paid Media</span><span class="proj-tag">Email</span></div>
+          <p class="proj-client">Prose</p>
+          <p class="proj-desc-short">Performance creative for subscription retention — email, display &amp; paid social.</p>
+        </div>
+      </a>
+
+      <!-- 10 -->
+      <a href="#" class="proj-card" data-tags="campaign,brand">
+        <div class="proj-thumb">
+          <div class="proj-thumb-inner art-10"></div>
+          <div class="proj-overlay">
+            <div class="proj-overlay-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="proj-meta">
+          <div class="proj-tags"><span class="proj-tag">Campaign</span><span class="proj-tag">Art Direction</span></div>
+          <p class="proj-client">Nécessaire</p>
+          <p class="proj-desc-short">Art directed seasonal campaign with clean editorial aesthetic across all channels.</p>
+        </div>
+      </a>
+
+    </div><!-- /grid -->
+  </div><!-- /inner -->
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-copy">© 2025 Soojin Park — Charlotte, NC</span>
+  <span class="footer-badge">Available for new roles</span>
+</footer>
+
+<script>
+// Filter logic
+const filterBtns = document.querySelectorAll('.filter-btn');
+const cards = document.querySelectorAll('.proj-card');
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.textContent.trim().toLowerCase();
+    cards.forEach(card => {
+      const tags = card.dataset.tags || '';
+      if (filter === 'all' || tags.includes(filter)) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+});
+
+// Hamburger menu
+const burger = document.getElementById('burger');
+const drawer = document.getElementById('drawer');
+burger.addEventListener('click', () => {
+  burger.classList.toggle('open');
+  drawer.classList.toggle('open');
+  document.body.style.overflow = drawer.classList.contains('open') ? 'hidden' : '';
+});
+document.querySelectorAll('.drawer-link').forEach(link => {
+  link.addEventListener('click', () => {
+    burger.classList.remove('open');
+    drawer.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
+// Custom cursor
+const cur = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+(function animCursor() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
+})();
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+});
+
+// Scroll progress + nav stuck
+const prog = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+  prog.style.transform = `scaleX(${pct})`;
+  document.getElementById('nav').classList.toggle('stuck', window.scrollY > 40);
+});
+</script>
+</body>
+</html>
